@@ -15,9 +15,17 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
             vTashDatabase = tashDatabase;
         }
 
-        [HttpGet, ODataRoute("ControllableProcesses")]
+        [HttpGet, ODataRoute("ControllableProcesses"), EnableQuery]
         public IActionResult Get() {
             return Ok(vTashDatabase.ControllableProcesses);
+        }
+
+        [HttpGet, ODataRoute("ControllableProcesses({id})"), EnableQuery]
+        public IActionResult Get([FromODataUri] int id) {
+            var process = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == id);
+            if (process == null) { return NotFound(); }
+
+            return Ok(process);
         }
 
         [HttpPut, ODataRoute("ControllableProcesses")]
@@ -30,6 +38,18 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
                 processes.Remove(process);
             }
             processes.Add(controllableProcess);
+            return StatusCode((int)HttpStatusCode.NoContent);
+        }
+
+        [HttpPatch, ODataRoute("ControllableProcesses({id})")]
+        public IActionResult Patch([FromODataUri] int id, Delta<ControllableProcess> patch) {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var process = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == id);
+            if (process == null) { return NotFound(); }
+
+            patch.Patch(process);
+
             return StatusCode((int)HttpStatusCode.NoContent);
         }
     }
