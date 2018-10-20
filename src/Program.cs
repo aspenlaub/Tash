@@ -1,0 +1,21 @@
+﻿using Aspenlaub.Net.GitHub.CSharp.Dvin.Extensions;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+
+namespace Aspenlaub.Net.GitHub.CSharp.Tash {
+    public class Program {
+        public static void Main(string[] args) {
+            var builder = CreateWebHostBuilder(args);
+            builder.RunHost(args);
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+#if DEBUG
+                .UseDvin(Constants.TashAppId, false, args)
+#else
+                .UseDvin(Constants.TashAppId, true, args)
+#endif
+                .UseStartup<Startup>();
+    }
+}
