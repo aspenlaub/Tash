@@ -29,7 +29,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
             var process = CreateTestProcess();
 
             using (var client = ControllerTestHelpers.CreateHttpClient()) {
-                var response = await PutControllableProcess(process, client);
+                var response = await PutControllableProcess(client, process);
                 Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
                 var controllableProcesses = await GetControllableProcesses(client);
@@ -43,7 +43,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
             var process = CreateTestProcess();
 
             using (var client = ControllerTestHelpers.CreateHttpClient()) {
-                var response = await PutControllableProcess(process, client);
+                var response = await PutControllableProcess(client, process);
                 Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
                 var controllableProcess = await GetControllableProcess(client, process.ProcessId);
@@ -57,7 +57,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
             var process = CreateTestProcess();
 
             using (var client = ControllerTestHelpers.CreateHttpClient()) {
-                var response = await PutControllableProcess(process, client);
+                var response = await PutControllableProcess(client, process);
                 Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
                 var confirmation = new ControllableProcessConfirmation {
@@ -65,7 +65,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
                     ConfirmedAt = DateTime.Now.AddSeconds(47)
                 };
 
-                response = await PatchControllableProcess(process.ProcessId, confirmation, client);
+                response = await PatchControllableProcess(client, process.ProcessId, confirmation);
                 Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
                 var controllableProcess = await GetControllableProcess(client, process.ProcessId);
@@ -77,17 +77,61 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
             }
         }
 
-        private static async Task<HttpResponseMessage> PutControllableProcess(ControllableProcess process, HttpClient client) {
+        [TestMethod]
+        public async Task CanPostControllableProcess() {
+            var process = CreateTestProcess();
+
+            using (var client = ControllerTestHelpers.CreateHttpClient()) {
+                var response = await PostControllableProcess(client, process);
+                Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+
+                var controllableProcesses = await GetControllableProcesses(client);
+                Assert.AreEqual(1, controllableProcesses.Count);
+                Assert.IsTrue(process.MemberwiseEquals(controllableProcesses[0]));
+
+                response = await PostControllableProcess(client, process);
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task CanDeleteControllableProcess() {
+            var process = CreateTestProcess();
+
+            using (var client = ControllerTestHelpers.CreateHttpClient()) {
+                var response = await PostControllableProcess(client, process);
+                Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+
+                var controllableProcesses = await GetControllableProcesses(client);
+                Assert.AreEqual(1, controllableProcesses.Count);
+                Assert.IsTrue(process.MemberwiseEquals(controllableProcesses[0]));
+
+                response = await DeleteControllableProcess(client, process.ProcessId);
+                Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+
+                controllableProcesses = await GetControllableProcesses(client);
+                Assert.AreEqual(0, controllableProcesses.Count);
+            }
+        }
+
+        private static async Task<HttpResponseMessage> PutControllableProcess(HttpClient client, ControllableProcess process) {
             var request = new StringContent(JsonConvert.SerializeObject(process), Encoding.UTF8, "application/json");
             request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var response = await client.PutAsync(BaseUrl, request);
             return response;
         }
 
-        private static async Task<HttpResponseMessage> PatchControllableProcess(int processId, ControllableProcessConfirmation confirmation, HttpClient client) {
+        private static async Task<HttpResponseMessage> PatchControllableProcess(HttpClient client, int processId, ControllableProcessConfirmation confirmation) {
             var request = new StringContent(JsonConvert.SerializeObject(confirmation), Encoding.UTF8, "application/json");
             request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var response = await client.PatchAsync($"{BaseUrl}({processId})", request);
+            return response;
+        }
+
+        private static async Task<HttpResponseMessage> PostControllableProcess(HttpClient client, ControllableProcess process) {
+            var request = new StringContent(JsonConvert.SerializeObject(process), Encoding.UTF8, "application/json");
+            request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var response = await client.PostAsync(BaseUrl, request);
             return response;
         }
 
@@ -116,6 +160,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
             var responseString = await response.Content.ReadAsStringAsync();
             var controllableProcess = JsonConvert.DeserializeObject<ControllableProcess>(responseString);
             return controllableProcess;
+        }
+
+        private static async Task<HttpResponseMessage> DeleteControllableProcess(HttpClient client, int processId) {
+            return await client.DeleteAsync($"{BaseUrl}({processId})");
         }
     }
 }

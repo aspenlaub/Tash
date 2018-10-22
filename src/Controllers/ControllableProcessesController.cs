@@ -22,35 +22,79 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
 
         [HttpGet, ODataRoute("ControllableProcesses({id})"), EnableQuery]
         public IActionResult Get([FromODataUri] int id) {
-            var process = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == id);
-            if (process == null) { return NotFound(); }
+            var controllableProcessFromDb = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == id);
+            if (controllableProcessFromDb == null) { return NotFound(); }
 
-            return Ok(process);
+            return Ok(controllableProcessFromDb);
         }
 
+        /// <summary>
+        /// Used by SaveChangesAync Update (!) action with SaveChangesOptions.ReplaceOnUpdate
+        /// </summary>
+        /// <param name="controllableProcess"></param>
+        /// <returns></returns>
         [HttpPut, ODataRoute("ControllableProcesses")]
         public IActionResult Put([FromBody] ControllableProcess controllableProcess) {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var processes = vTashDatabase.ControllableProcesses;
-            var process = processes.FirstOrDefault(p => p.ProcessId == controllableProcess.ProcessId);
-            if (process != null) {
-                processes.Remove(process);
+            var controllableProcessedFromDb = vTashDatabase.ControllableProcesses;
+            var controllableProcessFromDb = controllableProcessedFromDb.FirstOrDefault(p => p.ProcessId == controllableProcess.ProcessId);
+            if (controllableProcessFromDb != null) {
+                controllableProcessedFromDb.Remove(controllableProcessFromDb);
             }
-            processes.Add(controllableProcess);
-            return StatusCode((int)HttpStatusCode.NoContent);
+            controllableProcessedFromDb.Add(controllableProcess);
+            return Updated(controllableProcess);
         }
 
+        /// <summary>
+        /// Used by SaveChangesAync Update action without SaveChangesOptions.ReplaceOnUpdate
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="patch"></param>
+        /// <returns></returns>
         [HttpPatch, ODataRoute("ControllableProcesses({id})")]
         public IActionResult Patch([FromODataUri] int id, Delta<ControllableProcess> patch) {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var process = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == id);
-            if (process == null) { return NotFound(); }
+            var controllableProcessFromDb = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == id);
+            if (controllableProcessFromDb == null) { return NotFound(); }
 
-            patch.Patch(process);
+            patch.Patch(controllableProcessFromDb);
 
+            return Updated(controllableProcessFromDb);
+        }
+
+        /// <summary>
+        /// Used by SaveChangesAsync Insert action
+        /// </summary>
+        /// <param name="controllableProcess"></param>
+        /// <returns></returns>
+        [HttpPost, ODataRoute("ControllableProcesses")]
+        public IActionResult Post([FromBody] ControllableProcess controllableProcess) {
+            var controllableProcessFromDb = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == controllableProcess.ProcessId);
+            if (controllableProcessFromDb != null) {
+                return BadRequest();
+            }
+
+            vTashDatabase.ControllableProcesses.Add(controllableProcess);
+            return Created(controllableProcess);
+        }
+
+        /// <summary>
+        /// Used by SaveChangesAsync Delete action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete, ODataRoute("ControllableProcesses({id})")]
+        public IActionResult DeleteControllableProcess([FromODataUri] int id) {
+            var controllableProcessFromDb = vTashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == id);
+            if (controllableProcessFromDb == null) {
+                return NotFound();
+            }
+
+            vTashDatabase.ControllableProcesses.Remove(controllableProcessFromDb);
             return StatusCode((int)HttpStatusCode.NoContent);
         }
+
     }
 }
