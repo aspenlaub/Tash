@@ -117,7 +117,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
         private static async Task<HttpResponseMessage> PutControllableProcess(HttpClient client, ControllableProcess process) {
             var request = new StringContent(JsonConvert.SerializeObject(process), Encoding.UTF8, "application/json");
             request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await client.PutAsync(BaseUrl, request);
+            var response = await client.PutAsync($"{BaseUrl}({process.ProcessId})", request);
             return response;
         }
 

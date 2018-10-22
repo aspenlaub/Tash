@@ -31,17 +31,20 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         /// <summary>
         /// Used by SaveChangesAync Update (!) action with SaveChangesOptions.ReplaceOnUpdate
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="controllableProcess"></param>
         /// <returns></returns>
-        [HttpPut, ODataRoute("ControllableProcesses")]
-        public IActionResult Put([FromBody] ControllableProcess controllableProcess) {
+        [HttpPut, ODataRoute("ControllableProcesses({id})")]
+        public IActionResult Put([FromODataUri] int id, [FromBody] ControllableProcess controllableProcess) {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
             var controllableProcessedFromDb = vTashDatabase.ControllableProcesses;
-            var controllableProcessFromDb = controllableProcessedFromDb.FirstOrDefault(p => p.ProcessId == controllableProcess.ProcessId);
+            var controllableProcessFromDb = controllableProcessedFromDb.FirstOrDefault(p => p.ProcessId == id);
             if (controllableProcessFromDb != null) {
                 controllableProcessedFromDb.Remove(controllableProcessFromDb);
             }
+
+            controllableProcess.ProcessId = id;
             controllableProcessedFromDb.Add(controllableProcess);
             return Updated(controllableProcess);
         }
