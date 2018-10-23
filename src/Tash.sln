@@ -7,10 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tash", "Tash.csproj", "{7E8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tash.Test", "Test\Tash.Test.csproj", "{083BE6EE-07CC-4CE4-9060-5B05B7ACD7EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tash.Client", "Client\Tash.Client.csproj", "{1EFE5B57-3C6D-4794-B703-1EC553D19F8C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tash.Client.Test", "Client\Test\Tash.Client.Test.csproj", "{F461EFFC-189F-477C-BCB6-387BAE6C64BD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{083BE6EE-07CC-4CE4-9060-5B05B7ACD7EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{083BE6EE-07CC-4CE4-9060-5B05B7ACD7EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{083BE6EE-07CC-4CE4-9060-5B05B7ACD7EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EFE5B57-3C6D-4794-B703-1EC553D19F8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EFE5B57-3C6D-4794-B703-1EC553D19F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EFE5B57-3C6D-4794-B703-1EC553D19F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EFE5B57-3C6D-4794-B703-1EC553D19F8C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F461EFFC-189F-477C-BCB6-387BAE6C64BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F461EFFC-189F-477C-BCB6-387BAE6C64BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F461EFFC-189F-477C-BCB6-387BAE6C64BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F461EFFC-189F-477C-BCB6-387BAE6C64BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
