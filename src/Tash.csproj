@@ -14,9 +14,13 @@
     <NuspecFile>Tash.nuspec</NuspecFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Client\**" />
     <Compile Remove="Test\**" />
+    <Content Remove="Client\**" />
     <Content Remove="Test\**" />
+    <EmbeddedResource Remove="Client\**" />
     <EmbeddedResource Remove="Test\**" />
+    <None Remove="Client\**" />
     <None Remove="Test\**" />
   </ItemGroup>
   <ItemGroup>

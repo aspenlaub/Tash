@@ -10,6 +10,7 @@ using Aspenlaub.Net.GitHub.CSharp.Tash.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using ControllableProcess = Aspenlaub.Net.GitHub.CSharp.Tash.Model.ControllableProcess;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
     [TestClass]

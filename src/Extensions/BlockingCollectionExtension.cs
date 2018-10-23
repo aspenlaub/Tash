@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Extensions {
+    // ReSharper disable once UnusedMember.Global
     public static class BlockingCollectionExtension {
         public static void Remove<T>(this BlockingCollection<T> collection, T item) {
             lock (collection) {
