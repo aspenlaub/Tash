@@ -5,5 +5,6 @@ using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.DataAccess {
     public class TashDatabase : ITashDatabase {
         public BlockingCollection<ControllableProcess> ControllableProcesses { get; set; } = new BlockingCollection<ControllableProcess>();
+        public BlockingCollection<ControllableProcessTask> ControllableProcessTasks { get; set; } = new BlockingCollection<ControllableProcessTask>();
     }
 }

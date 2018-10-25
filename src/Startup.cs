@@ -50,6 +50,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash {
                 ContainerName = "DefaultContainer"
             };
             builder.EntitySet<ControllableProcess>("ControllableProcesses");
+            builder.EntitySet<ControllableProcessTask>("ControllableProcessTasks");
 
             return builder.GetEdmModel();
         }

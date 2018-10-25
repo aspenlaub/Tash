@@ -38,14 +38,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         public IActionResult Put([FromODataUri] int id, [FromBody] ControllableProcess controllableProcess) {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var controllableProcessedFromDb = vTashDatabase.ControllableProcesses;
-            var controllableProcessFromDb = controllableProcessedFromDb.FirstOrDefault(p => p.ProcessId == id);
+            var controllableProcessesFromDb = vTashDatabase.ControllableProcesses;
+            var controllableProcessFromDb = controllableProcessesFromDb.FirstOrDefault(p => p.ProcessId == id);
             if (controllableProcessFromDb != null) {
-                controllableProcessedFromDb.Remove(controllableProcessFromDb);
+                controllableProcessesFromDb.Remove(controllableProcessFromDb);
             }
 
             controllableProcess.ProcessId = id;
-            controllableProcessedFromDb.Add(controllableProcess);
+            controllableProcessesFromDb.Add(controllableProcess);
             return Updated(controllableProcess);
         }
 
@@ -98,6 +98,5 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
             vTashDatabase.ControllableProcesses.Remove(controllableProcessFromDb);
             return StatusCode((int)HttpStatusCode.NoContent);
         }
-
     }
 }
