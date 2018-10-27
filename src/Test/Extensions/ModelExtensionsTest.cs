@@ -11,14 +11,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Extensions {
         public void CanCompareMemberwise() {
             var process = new ControllableProcess {
                 ProcessId = 4711,
-                Busy = false,
+                Status = ControllableProcessStatus.Idle,
                 ConfirmedAt = DateTime.Now,
                 LaunchCommand = "StartMeUp.cmd",
                 Title = "This is not a title"
             };
             var otherProcess = new ControllableProcess {
                 ProcessId = 4712,
-                Busy = false,
+                Status = ControllableProcessStatus.Idle,
                 ConfirmedAt = DateTime.Now,
                 LaunchCommand = "StartMeUp.cmd",
                 Title = "This is not a title"

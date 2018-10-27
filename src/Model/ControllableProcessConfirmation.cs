@@ -1,8 +1,11 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Model {
     public class ControllableProcessConfirmation {
-        public bool Busy { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ControllableProcessStatus Status { get; set; }
 
         public DateTime ConfirmedAt { get; set; }
     }

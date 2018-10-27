@@ -62,7 +62,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
                 Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
                 var confirmation = new ControllableProcessConfirmation {
-                    Busy = true,
+                    Status = ControllableProcessStatus.Busy,
                     ConfirmedAt = DateTime.Now.AddSeconds(47)
                 };
 
@@ -72,7 +72,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
                 var controllableProcess = await GetControllableProcess(client, process.ProcessId);
                 Assert.IsNotNull(controllableProcess);
                 Assert.IsFalse(process.MemberwiseEquals(controllableProcess));
-                process.Busy = confirmation.Busy;
+                process.Status = confirmation.Status;
                 process.ConfirmedAt = confirmation.ConfirmedAt;
                 Assert.IsTrue(process.MemberwiseEquals(controllableProcess));
             }
@@ -139,7 +139,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
         private static ControllableProcess CreateTestProcess() {
             var process = new ControllableProcess {
                 ProcessId = 4711,
-                Busy = false,
+                Status = ControllableProcessStatus.Idle,
                 ConfirmedAt = DateTime.Now,
                 LaunchCommand = "StartMeUp.cmd",
                 Title = "This is not a title"
