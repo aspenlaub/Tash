@@ -1,6 +1,6 @@
 ﻿using Aspenlaub.Net.GitHub.CSharp.Dvin.Attributes;
-using Aspenlaub.Net.GitHub.CSharp.Tash.DataAccess;
-using Aspenlaub.Net.GitHub.CSharp.Tash.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
+using Aspenlaub.Net.GitHub.CSharp.Tash.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
@@ -14,8 +14,6 @@ using Microsoft.OData.Edm;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash {
     public class Startup {
-        private readonly ITashDatabase vTashDatabase = new TashDatabase();
-
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
@@ -27,7 +25,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash {
             services.AddOData();
             services.AddMvc(config => config.Filters.Add(new DvinExceptionFilterAttribute()));
 
-            services.AddSingleton(vTashDatabase);
+            services.UseTashDvinAndPegh(new DummyCsArgumentPrompter());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -29,7 +29,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         }
 
         /// <summary>
-        /// Used by SaveChangesAync Update (!) action with SaveChangesOptions.ReplaceOnUpdate
+        /// Used by SaveChangesAsync Update (!) action with SaveChangesOptions.ReplaceOnUpdate
         /// </summary>
         /// <param name="id"></param>
         /// <param name="controllableProcess"></param>
@@ -50,7 +50,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         }
 
         /// <summary>
-        /// Used by SaveChangesAync Update action without SaveChangesOptions.ReplaceOnUpdate
+        /// Used by SaveChangesAsync Update action without SaveChangesOptions.ReplaceOnUpdate
         /// </summary>
         /// <param name="id"></param>
         /// <param name="patch"></param>
