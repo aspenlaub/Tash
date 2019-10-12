@@ -12,9 +12,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash {
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
 #if DEBUG
-                .UseDvin(Constants.TashAppId, false, args)
+                .UseDvinAndPegh(Constants.TashAppId, false, args)
 #else
-                .UseDvin(Constants.TashAppId, true, args)
+                .UseDvinAndPegh(Constants.TashAppId, true, args)
 #endif
                 .UseStartup<Startup>();
     }
