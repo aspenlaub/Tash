@@ -1,4 +1,4 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Dvin.Extensions;
+﻿using Aspenlaub.Net.GitHub.CSharp.DvinStandard.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 

@@ -1,5 +1,5 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Dvin.Attributes;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
+﻿using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
+using Aspenlaub.Net.GitHub.CSharp.Tash.Attributes;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.AspNet.OData.Builder;
