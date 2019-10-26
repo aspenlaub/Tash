@@ -31,8 +31,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.Dvin" Version="2.0.90.1155" />
-    <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.DvinStandard" Version="2.0.90.1175" />
+    <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.Dvin" Version="2.0.94.907" />
+    <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.DvinStandard" Version="2.0.94.912" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.2" />
