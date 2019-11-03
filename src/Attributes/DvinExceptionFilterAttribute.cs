@@ -8,6 +8,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Attributes {
     public class DvinExceptionFilterAttribute : ExceptionFilterAttribute {
         protected static IFolder ExceptionLogFolder;
 
+        // ReSharper disable once UnusedMember.Global
         public static void SetExceptionLogFolder(IFolder exceptionLogFolder) {
             ExceptionLogFolder = exceptionLogFolder;
         }
