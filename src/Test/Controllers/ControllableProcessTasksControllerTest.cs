@@ -116,7 +116,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
             var process = new ControllableProcessTask {
                 Id = Guid.NewGuid(),
                 ProcessId = 4711,
-                Type = ControllableProcessTaskType.PressButton,
+                Type = "PressButton",
                 ControlName = "RunButton",
                 Text = "Buttons do not have text",
                 Status = ControllableProcessTaskStatus.Requested

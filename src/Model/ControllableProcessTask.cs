@@ -11,8 +11,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Model {
 
         public int ProcessId { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ControllableProcessTaskType Type { get; set; }
+        public string Type { get; set; }
 
         public string ControlName { get; set; } = "";
 
