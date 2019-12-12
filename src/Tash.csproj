@@ -34,6 +34,14 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="packageicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packageicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.Dvin" Version="2.0.94.907" />
     <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.DvinStandard" Version="2.0.94.912" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
