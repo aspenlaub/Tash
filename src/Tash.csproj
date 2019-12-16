@@ -43,8 +43,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.Dvin" Version="2.0.94.907" />
-    <PackageReference Include="Aspenlaub.Net.GitHub.CSharp.DvinStandard" Version="2.0.94.912" />
+    <PackageReference Include="DvinStandard" Version="2.0.145.1017" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.3" />
