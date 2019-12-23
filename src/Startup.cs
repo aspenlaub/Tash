@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 // ReSharper disable UnusedMember.Global
 
@@ -23,13 +24,16 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddOData();
+
+            services.AddControllersWithViews(mvc => mvc.EnableEndpointRouting = false);
+
             services.AddMvc(config => config.Filters.Add(new DvinExceptionFilterAttribute()));
 
             services.UseTashDvinAndPegh(new DummyCsArgumentPrompter());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }

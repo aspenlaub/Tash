@@ -1,4 +1,4 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.DvinStandard.Components;
+﻿using Aspenlaub.Net.GitHub.CSharp.DvinCore.Components;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Tash.DataAccess;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Interfaces;
