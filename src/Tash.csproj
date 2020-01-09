@@ -43,8 +43,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DvinCore" Version="2.0.150.802" />
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0-beta" />
+    <PackageReference Include="DvinCore" Version="2.0.169.1254" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
