@@ -45,8 +45,8 @@
   <ItemGroup>
     <PackageReference Include="DvinCore" Version="2.0.573.1109" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.6" />
-    <PackageReference Include="Microsoft.OData.Core" Version="7.8.2" />
-    <PackageReference Include="Microsoft.OData.Edm" Version="7.8.2" />
+    <PackageReference Include="Microsoft.OData.Core" Version="7.8.3" />
+    <PackageReference Include="Microsoft.OData.Edm" Version="7.8.3" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
