@@ -24,26 +24,28 @@
   <ItemGroup>
     <Compile Remove="Client\**" />
     <Compile Remove="Test\**" />
+    <Compile Remove="wwwroot\**" />
     <Content Remove="Client\**" />
     <Content Remove="Test\**" />
+    <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="Client\**" />
     <EmbeddedResource Remove="Test\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="Client\**" />
     <None Remove="Test\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Remove="wwwroot\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="packageicon.ico" />
+    <None Remove="packageicon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packageicon.ico">
+    <Content Include="packageicon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DvinCore" Version="2.0.573.1109" />
+    <PackageReference Include="DvinCore" Version="2.0.610.1071" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.6" />
     <PackageReference Include="Microsoft.OData.Core" Version="7.8.3" />
     <PackageReference Include="Microsoft.OData.Edm" Version="7.8.3" />
