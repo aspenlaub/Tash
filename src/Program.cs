@@ -1,21 +1,24 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Dvin.Extensions;
+﻿using System.Threading.Tasks;
+using Aspenlaub.Net.GitHub.CSharp.Dvin.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash {
     public class Program {
-        public static void Main(string[] args) {
-            var builder = CreateWebHostBuilder(args);
+        public static async Task Main(string[] args) {
+            var builder = await CreateWebHostBuilderAsync(args);
             builder.RunHost(args);
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-#if DEBUG
-                .UseDvinAndPegh(Constants.TashAppId, false, args)
-#else
-                .UseDvinAndPegh(Constants.TashAppId, true, args)
-#endif
+        public static async Task<IWebHostBuilder> CreateWebHostBuilderAsync(string[] args) {
+            var release = true;
+            #if DEBUG
+                release = false;
+            #endif
+            return 
+                (await WebHost.CreateDefaultBuilder(args).UseDvinAndPeghAsync(Constants.TashAppId, release, args))
                 .UseStartup<Startup>();
-    }
+        }
+}
 }
