@@ -13,9 +13,9 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Model {
 
         public string Type { get; set; }
 
-        public string ControlName { get; set; } = "";
+        public string ControlName { get; init; } = "";
 
-        public string Text { get; set; } = "";
+        public string Text { get; init; } = "";
 
         [JsonConverter(typeof(StringEnumConverter))]
         public ControllableProcessTaskStatus Status { get; set; }

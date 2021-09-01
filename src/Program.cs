@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash {
-    public class Program {
+    public static class Program {
         public static async Task Main(string[] args) {
             var builder = await CreateWebHostBuilderAsync(args);
             builder.RunHost(args);
@@ -16,7 +16,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash {
             #if DEBUG
                 release = false;
             #endif
-            return 
+            return
                 (await WebHost.CreateDefaultBuilder(args).UseDvinAndPeghAsync(Constants.TashAppId, release, args))
                 .UseStartup<Startup>();
         }

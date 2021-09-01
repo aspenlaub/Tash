@@ -6,43 +6,44 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Deltas;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.Extensions.Logging;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
     public class ControllableProcessTasksController : ODataController {
-        private readonly ITashDatabase vTashDatabase;
-        private readonly ISimpleLogger vSimpleLogger;
-        private readonly string vLogId;
+        private readonly ITashDatabase TashDatabase;
+        private readonly ISimpleLogger SimpleLogger;
+        private readonly string LogId;
 
         public ControllableProcessTasksController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger, ILogConfiguration logConfiguration) {
-            vTashDatabase = tashDatabase;
-            vSimpleLogger = simpleLogger;
-            vSimpleLogger.LogSubFolder = logConfiguration.LogSubFolder;
-            vLogId = logConfiguration.LogId;
+            TashDatabase = tashDatabase;
+            SimpleLogger = simpleLogger;
+            SimpleLogger.LogSubFolder = logConfiguration.LogSubFolder;
+            LogId = logConfiguration.LogId;
         }
 
-        [HttpGet, ODataRoute("ControllableProcessTasks"), EnableQuery]
+        [HttpGet, EnableQuery]
         public IActionResult Get() {
-            using (vSimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), vLogId))) {
-                vSimpleLogger.LogInformation("Returning all controllable process tasks");
-                return Ok(vTashDatabase.ControllableProcessTasks);
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+                SimpleLogger.LogInformation("Returning all controllable process tasks");
+                return Ok(TashDatabase.ControllableProcessTasks);
             }
         }
 
-        [HttpGet, ODataRoute("ControllableProcessTasks({id})"), EnableQuery]
-        public IActionResult Get([FromODataUri] Guid id) {
-            using (vSimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), vLogId))) {
-                vSimpleLogger.LogInformation($"Get controllable process task with id={id}");
-                var controllableProcessTaskFromDb = vTashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == id);
+        [HttpGet, EnableQuery]
+        public IActionResult Get(Guid key) {
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+                SimpleLogger.LogInformation($"Get controllable process task with id={key}");
+                var controllableProcessTaskFromDb = TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == key);
                 if (controllableProcessTaskFromDb == null) {
-                    vSimpleLogger.LogInformation($"No controllable process task found with id={id}");
+                    SimpleLogger.LogInformation($"No controllable process task found with id={key}");
                     return NotFound();
                 }
 
-                vSimpleLogger.LogInformation($"Returning controllable process task with id={id}");
+                SimpleLogger.LogInformation($"Returning controllable process task with id={key}");
                 return Ok(controllableProcessTaskFromDb);
             }
         }
@@ -50,28 +51,28 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         /// <summary>
         /// Used by SaveChangesAsync Update (!) action with SaveChangesOptions.ReplaceOnUpdate
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="key"></param>
         /// <param name="processTask"></param>
         /// <returns></returns>
-        [HttpPut, ODataRoute("ControllableProcessTasks({id})")]
-        public IActionResult Put([FromODataUri] Guid id, [FromBody] ControllableProcessTask processTask) {
-            using (vSimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), vLogId))) {
-                vSimpleLogger.LogInformation($"Put controllable process task with id={id}");
+        [HttpPut]
+        public IActionResult Put(Guid key, [FromBody] ControllableProcessTask processTask) {
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+                SimpleLogger.LogInformation($"Put controllable process task with id={key}");
                 if (!ModelState.IsValid) {
-                    vSimpleLogger.LogInformation($"Model is not valid, cannot put controllable process task with id={id}");
+                    SimpleLogger.LogInformation($"Model is not valid, cannot put controllable process task with id={key}");
                     return BadRequest(ModelState);
                 }
 
-                var controllableProcessTasksFromDb = vTashDatabase.ControllableProcessTasks;
-                var controllableProcessTaskFromDb = controllableProcessTasksFromDb.FirstOrDefault(p => p.Id == id);
+                var controllableProcessTasksFromDb = TashDatabase.ControllableProcessTasks;
+                var controllableProcessTaskFromDb = controllableProcessTasksFromDb.FirstOrDefault(p => p.Id == key);
                 if (controllableProcessTaskFromDb != null) {
-                    vSimpleLogger.LogInformation($"Controllable process task deleted for id={id}");
+                    SimpleLogger.LogInformation($"Controllable process task deleted for id={key}");
                     controllableProcessTasksFromDb.Remove(controllableProcessTaskFromDb);
                 }
 
-                processTask.Id = id;
+                processTask.Id = key;
                 controllableProcessTasksFromDb.Add(processTask);
-                vSimpleLogger.LogInformation($"Controllable process task inserted for id={id}");
+                SimpleLogger.LogInformation($"Controllable process task inserted for id={key}");
                 return Updated(processTask);
             }
         }
@@ -79,27 +80,27 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         /// <summary>
         /// Used by SaveChangesAsync Update action without SaveChangesOptions.ReplaceOnUpdate
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="key"></param>
         /// <param name="patch"></param>
         /// <returns></returns>
-        [HttpPatch, ODataRoute("ControllableProcessTasks({id})")]
-        public IActionResult Patch([FromODataUri] Guid id, Delta<ControllableProcessTask> patch) {
-            using (vSimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), vLogId))) {
-                vSimpleLogger.LogInformation($"Patch controllable process task with id={id}");
+        [HttpPatch]
+        public IActionResult Patch(Guid key, Delta<ControllableProcessTask> patch) {
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+                SimpleLogger.LogInformation($"Patch controllable process task with id={key}");
                 if (!ModelState.IsValid) {
-                    vSimpleLogger.LogInformation($"Model is not valid, cannot patch controllable process task with id={id}");
+                    SimpleLogger.LogInformation($"Model is not valid, cannot patch controllable process task with id={key}");
                     return BadRequest(ModelState);
                 }
 
-                var controllableProcessTaskFromDb = vTashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == id);
+                var controllableProcessTaskFromDb = TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == key);
                 if (controllableProcessTaskFromDb == null) {
-                    vSimpleLogger.LogInformation($"No controllable process task found with id={id}");
+                    SimpleLogger.LogInformation($"No controllable process task found with id={key}");
                     return NotFound();
                 }
 
                 patch.Patch(controllableProcessTaskFromDb);
 
-                vSimpleLogger.LogInformation($"Controllable process task updated for id={id}");
+                SimpleLogger.LogInformation($"Controllable process task updated for id={key}");
                 return Updated(controllableProcessTaskFromDb);
             }
         }
@@ -109,18 +110,18 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         /// </summary>
         /// <param name="processTask"></param>
         /// <returns></returns>
-        [HttpPost, ODataRoute("ControllableProcessTasks")]
+        [HttpPost]
         public IActionResult Post([FromBody] ControllableProcessTask processTask) {
-            using (vSimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), vLogId))) {
-                vSimpleLogger.LogInformation($"Post controllable process task with id={processTask.Id}");
-                var controllableProcessTaskFromDb = vTashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == processTask.Id);
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+                SimpleLogger.LogInformation($"Post controllable process task with id={processTask.Id}");
+                var controllableProcessTaskFromDb = TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == processTask.Id);
                 if (controllableProcessTaskFromDb != null) {
-                    vSimpleLogger.LogInformation($"A controllable process task with id={processTask.Id} already exists");
+                    SimpleLogger.LogInformation($"A controllable process task with id={processTask.Id} already exists");
                     return BadRequest();
                 }
 
-                vTashDatabase.ControllableProcessTasks.Add(processTask);
-                vSimpleLogger.LogInformation($"Controllable process task inserted for id={processTask.Id}");
+                TashDatabase.ControllableProcessTasks.Add(processTask);
+                SimpleLogger.LogInformation($"Controllable process task inserted for id={processTask.Id}");
                 return Created(processTask);
             }
         }
@@ -128,20 +129,20 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers {
         /// <summary>
         /// Used by SaveChangesAsync Delete action
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="key"></param>
         /// <returns></returns>
-        [HttpDelete, ODataRoute("ControllableProcessTasks({id})")]
-        public IActionResult DeleteControllableProcess([FromODataUri] Guid id) {
-            using (vSimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), vLogId))) {
-                vSimpleLogger.LogInformation($"Delete controllable process task with id={id}");
-                var controllableProcessTaskFromDb = vTashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == id);
+        [HttpDelete]
+        public IActionResult Delete(Guid key) {
+            using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+                SimpleLogger.LogInformation($"Delete controllable process task with id={key}");
+                var controllableProcessTaskFromDb = TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == key);
                 if (controllableProcessTaskFromDb == null) {
-                    vSimpleLogger.LogInformation($"No controllable process task found with id={id}");
+                    SimpleLogger.LogInformation($"No controllable process task found with id={key}");
                     return NotFound();
                 }
 
-                vTashDatabase.ControllableProcessTasks.Remove(controllableProcessTaskFromDb);
-                vSimpleLogger.LogInformation($"Controllable process task deleted for id={id}");
+                TashDatabase.ControllableProcessTasks.Remove(controllableProcessTaskFromDb);
+                SimpleLogger.LogInformation($"Controllable process task deleted for id={key}");
                 return StatusCode((int) HttpStatusCode.NoContent);
             }
         }

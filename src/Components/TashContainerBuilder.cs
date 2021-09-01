@@ -5,6 +5,7 @@ using Aspenlaub.Net.GitHub.CSharp.Tash.Helpers;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Interfaces;
 using Autofac;
 using Microsoft.Extensions.DependencyInjection;
+// ReSharper disable UnusedMethodReturnValue.Global
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Components {
     public static class TashContainerBuilder {
