@@ -11,153 +11,153 @@ using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
-namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers {
-    [TestClass]
-    public class ControllableProcessTasksControllerTest {
-        private const string BaseUrl = "http://localhost:60404/ControllableProcessTasks";
+namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers;
 
-        [TestMethod]
-        public async Task CanGetControllableProcessTasks() {
-            using var client = ControllerTestHelpers.CreateHttpClient();
-            var controllableProcesses = await GetControllableProcessTasks(client);
-            Assert.AreEqual(0, controllableProcesses.Count);
-        }
+[TestClass]
+public class ControllableProcessTasksControllerTest {
+    private const string BaseUrl = "http://localhost:60404/ControllableProcessTasks";
 
-        [TestMethod]
-        public async Task CanPutControllableProcessTask() {
-            var processTask = CreateTestProcessTask();
+    [TestMethod]
+    public async Task CanGetControllableProcessTasks() {
+        using var client = ControllerTestHelpers.CreateHttpClient();
+        var controllableProcesses = await GetControllableProcessTasks(client);
+        Assert.AreEqual(0, controllableProcesses.Count);
+    }
 
-            using var client = ControllerTestHelpers.CreateHttpClient();
-            var response = await PutControllableProcessTask(client, processTask);
-            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+    [TestMethod]
+    public async Task CanPutControllableProcessTask() {
+        var processTask = CreateTestProcessTask();
 
-            var controllableProcesses = await GetControllableProcessTasks(client);
-            Assert.AreEqual(1, controllableProcesses.Count);
-            Assert.IsTrue(processTask.MemberwiseEquals(controllableProcesses[0]));
-        }
+        using var client = ControllerTestHelpers.CreateHttpClient();
+        var response = await PutControllableProcessTask(client, processTask);
+        Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
-        [TestMethod]
-        public async Task CanGetControllableProcessTask() {
-            var processTask = CreateTestProcessTask();
+        var controllableProcesses = await GetControllableProcessTasks(client);
+        Assert.AreEqual(1, controllableProcesses.Count);
+        Assert.IsTrue(processTask.MemberwiseEquals(controllableProcesses[0]));
+    }
 
-            using var client = ControllerTestHelpers.CreateHttpClient();
-            var response = await PutControllableProcessTask(client, processTask);
-            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+    [TestMethod]
+    public async Task CanGetControllableProcessTask() {
+        var processTask = CreateTestProcessTask();
 
-            var controllableProcessTask = await GetControllableProcessTask(client, processTask.Id);
-            Assert.IsNotNull(controllableProcessTask);
-            Assert.IsTrue(processTask.MemberwiseEquals(controllableProcessTask));
-        }
+        using var client = ControllerTestHelpers.CreateHttpClient();
+        var response = await PutControllableProcessTask(client, processTask);
+        Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
-        [TestMethod]
-        public async Task CanConfirmCompletedProcessTask() {
-            var processTask = CreateTestProcessTask();
+        var controllableProcessTask = await GetControllableProcessTask(client, processTask.Id);
+        Assert.IsNotNull(controllableProcessTask);
+        Assert.IsTrue(processTask.MemberwiseEquals(controllableProcessTask));
+    }
 
-            using var client = ControllerTestHelpers.CreateHttpClient();
-            var response = await PutControllableProcessTask(client, processTask);
-            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+    [TestMethod]
+    public async Task CanConfirmCompletedProcessTask() {
+        var processTask = CreateTestProcessTask();
 
-            var confirmation = new ControllableProcessTaskConfirmation {
-                Status = ControllableProcessTaskStatus.Completed
-            };
+        using var client = ControllerTestHelpers.CreateHttpClient();
+        var response = await PutControllableProcessTask(client, processTask);
+        Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
-            response = await PatchControllableProcessTask(client, processTask.Id, confirmation);
-            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+        var confirmation = new ControllableProcessTaskConfirmation {
+            Status = ControllableProcessTaskStatus.Completed
+        };
 
-            var controllableProcess = await GetControllableProcessTask(client, processTask.Id);
-            Assert.IsNotNull(controllableProcess);
-            Assert.IsFalse(processTask.MemberwiseEquals(controllableProcess));
-            processTask.Status = confirmation.Status;
-            Assert.IsTrue(processTask.MemberwiseEquals(controllableProcess));
-        }
+        response = await PatchControllableProcessTask(client, processTask.Id, confirmation);
+        Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
-        [TestMethod]
-        public async Task CanPostControllableProcessTask() {
-            var processTask = CreateTestProcessTask();
+        var controllableProcess = await GetControllableProcessTask(client, processTask.Id);
+        Assert.IsNotNull(controllableProcess);
+        Assert.IsFalse(processTask.MemberwiseEquals(controllableProcess));
+        processTask.Status = confirmation.Status;
+        Assert.IsTrue(processTask.MemberwiseEquals(controllableProcess));
+    }
 
-            using var client = ControllerTestHelpers.CreateHttpClient();
-            var response = await PostControllableProcessTask(client, processTask);
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+    [TestMethod]
+    public async Task CanPostControllableProcessTask() {
+        var processTask = CreateTestProcessTask();
 
-            var controllableProcessTasks = await GetControllableProcessTasks(client);
-            Assert.AreEqual(1, controllableProcessTasks.Count);
-            Assert.IsTrue(processTask.MemberwiseEquals(controllableProcessTasks[0]));
+        using var client = ControllerTestHelpers.CreateHttpClient();
+        var response = await PostControllableProcessTask(client, processTask);
+        Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
-            response = await PostControllableProcessTask(client, processTask);
-            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-        }
+        var controllableProcessTasks = await GetControllableProcessTasks(client);
+        Assert.AreEqual(1, controllableProcessTasks.Count);
+        Assert.IsTrue(processTask.MemberwiseEquals(controllableProcessTasks[0]));
 
-        [TestMethod]
-        public async Task CanDeleteControllableProcessTask() {
-            var processTask = CreateTestProcessTask();
+        response = await PostControllableProcessTask(client, processTask);
+        Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 
-            using var client = ControllerTestHelpers.CreateHttpClient();
-            var response = await PostControllableProcessTask(client, processTask);
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+    [TestMethod]
+    public async Task CanDeleteControllableProcessTask() {
+        var processTask = CreateTestProcessTask();
 
-            var controllableProcessTasks = await GetControllableProcessTasks(client);
-            Assert.AreEqual(1, controllableProcessTasks.Count);
-            Assert.IsTrue(processTask.MemberwiseEquals(controllableProcessTasks[0]));
+        using var client = ControllerTestHelpers.CreateHttpClient();
+        var response = await PostControllableProcessTask(client, processTask);
+        Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
-            response = await DeleteControllableProcessTask(client, processTask.Id);
-            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+        var controllableProcessTasks = await GetControllableProcessTasks(client);
+        Assert.AreEqual(1, controllableProcessTasks.Count);
+        Assert.IsTrue(processTask.MemberwiseEquals(controllableProcessTasks[0]));
 
-            controllableProcessTasks = await GetControllableProcessTasks(client);
-            Assert.AreEqual(0, controllableProcessTasks.Count);
-        }
+        response = await DeleteControllableProcessTask(client, processTask.Id);
+        Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
-        private static ControllableProcessTask CreateTestProcessTask() {
-            var process = new ControllableProcessTask {
-                Id = Guid.NewGuid(),
-                ProcessId = 4711,
-                Type = "PressButton",
-                ControlName = "RunButton",
-                Text = "Buttons do not have text",
-                Status = ControllableProcessTaskStatus.Requested
-            };
-            return process;
-        }
+        controllableProcessTasks = await GetControllableProcessTasks(client);
+        Assert.AreEqual(0, controllableProcessTasks.Count);
+    }
 
-        private static async Task<List<ControllableProcessTask>> GetControllableProcessTasks(HttpClient client) {
-            var response = await client.GetAsync(BaseUrl);
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            var responseString = await response.Content.ReadAsStringAsync();
-            var controllableProcessTasks = JsonConvert.DeserializeObject<ODataResponse<ControllableProcessTask>>(responseString)?.Value.ToList();
-            return controllableProcessTasks;
-        }
+    private static ControllableProcessTask CreateTestProcessTask() {
+        var process = new ControllableProcessTask {
+            Id = Guid.NewGuid(),
+            ProcessId = 4711,
+            Type = "PressButton",
+            ControlName = "RunButton",
+            Text = "Buttons do not have text",
+            Status = ControllableProcessTaskStatus.Requested
+        };
+        return process;
+    }
 
-        private static async Task<ControllableProcessTask> GetControllableProcessTask(HttpClient client, Guid taskId) {
-            var response = await client.GetAsync($"{BaseUrl}({taskId})");
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            var responseString = await response.Content.ReadAsStringAsync();
-            var controllableProcessTask = JsonConvert.DeserializeObject<ControllableProcessTask>(responseString);
-            return controllableProcessTask;
-        }
+    private static async Task<List<ControllableProcessTask>> GetControllableProcessTasks(HttpClient client) {
+        var response = await client.GetAsync(BaseUrl);
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var responseString = await response.Content.ReadAsStringAsync();
+        var controllableProcessTasks = JsonConvert.DeserializeObject<ODataResponse<ControllableProcessTask>>(responseString)?.Value.ToList();
+        return controllableProcessTasks;
+    }
 
-        private static async Task<HttpResponseMessage> PutControllableProcessTask(HttpClient client, ControllableProcessTask processTask) {
-            var serializedTask = JsonConvert.SerializeObject(processTask);
-            var request = new StringContent(serializedTask, Encoding.UTF8, "application/json");
-            request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await client.PutAsync($"{BaseUrl}({processTask.Id})", request);
-            return response;
-        }
+    private static async Task<ControllableProcessTask> GetControllableProcessTask(HttpClient client, Guid taskId) {
+        var response = await client.GetAsync($"{BaseUrl}({taskId})");
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var responseString = await response.Content.ReadAsStringAsync();
+        var controllableProcessTask = JsonConvert.DeserializeObject<ControllableProcessTask>(responseString);
+        return controllableProcessTask;
+    }
 
-        private static async Task<HttpResponseMessage> PatchControllableProcessTask(HttpClient client, Guid taskId, ControllableProcessTaskConfirmation confirmation) {
-            var request = new StringContent(JsonConvert.SerializeObject(confirmation), Encoding.UTF8, "application/json");
-            request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await client.PatchAsync($"{BaseUrl}({taskId})", request);
-            return response;
-        }
+    private static async Task<HttpResponseMessage> PutControllableProcessTask(HttpClient client, ControllableProcessTask processTask) {
+        var serializedTask = JsonConvert.SerializeObject(processTask);
+        var request = new StringContent(serializedTask, Encoding.UTF8, "application/json");
+        request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        var response = await client.PutAsync($"{BaseUrl}({processTask.Id})", request);
+        return response;
+    }
 
-        private static async Task<HttpResponseMessage> PostControllableProcessTask(HttpClient client, ControllableProcessTask processTask) {
-            var request = new StringContent(JsonConvert.SerializeObject(processTask), Encoding.UTF8, "application/json");
-            request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await client.PostAsync(BaseUrl, request);
-            return response;
-        }
+    private static async Task<HttpResponseMessage> PatchControllableProcessTask(HttpClient client, Guid taskId, ControllableProcessTaskConfirmation confirmation) {
+        var request = new StringContent(JsonConvert.SerializeObject(confirmation), Encoding.UTF8, "application/json");
+        request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        var response = await client.PatchAsync($"{BaseUrl}({taskId})", request);
+        return response;
+    }
 
-        private static async Task<HttpResponseMessage> DeleteControllableProcessTask(HttpClient client, Guid taskId) {
-            return await client.DeleteAsync($"{BaseUrl}({taskId})");
-        }
+    private static async Task<HttpResponseMessage> PostControllableProcessTask(HttpClient client, ControllableProcessTask processTask) {
+        var request = new StringContent(JsonConvert.SerializeObject(processTask), Encoding.UTF8, "application/json");
+        request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        var response = await client.PostAsync(BaseUrl, request);
+        return response;
+    }
+
+    private static async Task<HttpResponseMessage> DeleteControllableProcessTask(HttpClient client, Guid taskId) {
+        return await client.DeleteAsync($"{BaseUrl}({taskId})");
     }
 }

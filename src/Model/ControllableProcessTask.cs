@@ -4,22 +4,22 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 // ReSharper disable UnusedMember.Global
 
-namespace Aspenlaub.Net.GitHub.CSharp.Tash.Model {
-    public class ControllableProcessTask {
-        [Key]
-        public Guid Id { get; set; }
+namespace Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 
-        public int ProcessId { get; set; }
+public class ControllableProcessTask {
+    [Key]
+    public Guid Id { get; set; }
 
-        public string Type { get; set; }
+    public int ProcessId { get; set; }
 
-        public string ControlName { get; init; } = "";
+    public string Type { get; set; }
 
-        public string Text { get; init; } = "";
+    public string ControlName { get; init; } = "";
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ControllableProcessTaskStatus Status { get; set; }
+    public string Text { get; init; } = "";
 
-        public string ErrorMessage { get; set; } = "";
-    }
+    [JsonConverter(typeof(StringEnumConverter))]
+    public ControllableProcessTaskStatus Status { get; set; }
+
+    public string ErrorMessage { get; set; } = "";
 }

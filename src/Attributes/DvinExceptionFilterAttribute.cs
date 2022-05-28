@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace Aspenlaub.Net.GitHub.CSharp.Tash.Attributes {
-    public class DvinExceptionFilterAttribute : ExceptionFilterAttribute {
-        private static IFolder ExceptionLogFolder;
+namespace Aspenlaub.Net.GitHub.CSharp.Tash.Attributes;
 
-        // ReSharper disable once UnusedMember.Global
-        public static void SetExceptionLogFolder(IFolder exceptionLogFolder) {
-            ExceptionLogFolder = exceptionLogFolder;
-        }
+public class DvinExceptionFilterAttribute : ExceptionFilterAttribute {
+    private static IFolder ExceptionLogFolder;
 
-        public override void OnException(ExceptionContext context) {
-            ExceptionSaver.SaveUnhandledException(ExceptionLogFolder, context.Exception, nameof(Dvin), _ => { });
-            context.Result = new JsonResult(InternalServerError.Create("An exception was logged. We are sorry for the inconvenience."));
-        }
+    // ReSharper disable once UnusedMember.Global
+    public static void SetExceptionLogFolder(IFolder exceptionLogFolder) {
+        ExceptionLogFolder = exceptionLogFolder;
+    }
+
+    public override void OnException(ExceptionContext context) {
+        ExceptionSaver.SaveUnhandledException(ExceptionLogFolder, context.Exception, nameof(Dvin), _ => { });
+        context.Result = new JsonResult(InternalServerError.Create("An exception was logged. We are sorry for the inconvenience."));
     }
 }
