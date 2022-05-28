@@ -10,14 +10,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Components;
 
 public static class TashContainerBuilder {
     // ReSharper disable once UnusedMember.Global
-    public static ContainerBuilder RegisterForTashDvinAndPegh(this ContainerBuilder builder, ICsArgumentPrompter csArgumentPrompter) {
-        builder.UseDvinAndPegh(csArgumentPrompter);
+    public static ContainerBuilder RegisterForTashDvinAndPegh(this ContainerBuilder builder, string applicationName, ICsArgumentPrompter csArgumentPrompter) {
+        builder.UseDvinAndPegh(applicationName, csArgumentPrompter);
         builder.RegisterInstance<ITashDatabase>(new TashDatabase());
         return builder;
     }
 
-    public static IServiceCollection UseTashDvinAndPegh(this IServiceCollection services, ICsArgumentPrompter csArgumentPrompter) {
-        services.UseDvinAndPegh(csArgumentPrompter);
+    public static IServiceCollection UseTashDvinAndPegh(this IServiceCollection services, string applicationName, ICsArgumentPrompter csArgumentPrompter) {
+        services.UseDvinAndPegh(applicationName, csArgumentPrompter);
         services.AddSingleton<ITashDatabase>(new TashDatabase());
         return services;
     }

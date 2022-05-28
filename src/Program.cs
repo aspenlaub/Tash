@@ -19,7 +19,7 @@ public static class Program {
         release = false;
 #endif
         return
-            (await WebHost.CreateDefaultBuilder(args).UseDvinAndPeghAsync(Constants.TashAppId, release, args))
+            (await WebHost.CreateDefaultBuilder(args).UseDvinAndPeghAsync("Tash", Constants.TashAppId, release, args))
             .UseStartup<Startup>();
     }
 }

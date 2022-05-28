@@ -21,7 +21,6 @@ public class ControllableProcessesController : ODataController {
     public ControllableProcessesController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger, ILogConfigurationFactory logConfigurationFactory) {
         TashDatabase = tashDatabase;
         SimpleLogger = simpleLogger;
-        logConfigurationFactory.InitializeIfNecessary("Tash", true);
         var logConfiguration = logConfigurationFactory.Create();
         SimpleLogger.LogSubFolder = logConfiguration.LogSubFolder;
         LogId = logConfiguration.LogId;

@@ -31,7 +31,7 @@ public class Startup {
 
         services.AddRazorPages(); // for MapRazorPages()
 
-        services.UseTashDvinAndPegh(new DummyCsArgumentPrompter());
+        services.UseTashDvinAndPegh("Tash", new DummyCsArgumentPrompter());
 
         services.AddControllers(opt => opt.Filters.Add<DvinExceptionFilterAttribute>());
     }
