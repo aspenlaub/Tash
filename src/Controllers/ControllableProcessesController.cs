@@ -16,19 +16,15 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers;
 public class ControllableProcessesController : ODataController {
     private readonly ITashDatabase TashDatabase;
     private readonly ISimpleLogger SimpleLogger;
-    private readonly string LogId;
 
-    public ControllableProcessesController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger, ILogConfigurationFactory logConfigurationFactory) {
+    public ControllableProcessesController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger) {
         TashDatabase = tashDatabase;
         SimpleLogger = simpleLogger;
-        var logConfiguration = logConfigurationFactory.Create();
-        SimpleLogger.LogSubFolder = logConfiguration.LogSubFolder;
-        LogId = logConfiguration.LogId;
     }
 
     [HttpGet, EnableQuery]
     public IActionResult Get() {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation("Returning all controllable processes");
             return Ok(TashDatabase.ControllableProcesses);
         }
@@ -36,7 +32,7 @@ public class ControllableProcessesController : ODataController {
 
     [HttpGet, EnableQuery]
     public IActionResult Get(int key) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Get controllable process with id={key}");
             var controllableProcessFromDb = TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {
@@ -57,7 +53,7 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpPut]
     public IActionResult Put(int key, [FromBody] ControllableProcess process) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Put controllable process with id={key}");
             if (!ModelState.IsValid) {
                 SimpleLogger.LogInformation($"Model is not valid, cannot put controllable process with id={key}");
@@ -86,7 +82,7 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpPatch]
     public IActionResult Patch(int key, Delta<ControllableProcess> patch) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Patch controllable process with id={key}");
             if (!ModelState.IsValid) {
                 SimpleLogger.LogInformation($"Model is not valid, cannot patch controllable process with id={key}");
@@ -113,7 +109,7 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpPost]
     public IActionResult Post([FromBody] ControllableProcess process) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Post controllable process with id={process.ProcessId}");
             var controllableProcessFromDb = TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == process.ProcessId);
             if (controllableProcessFromDb != null) {
@@ -134,7 +130,7 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpDelete]
     public IActionResult DeleteControllableProcess(int key) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Delete controllable process with id={key}");
             var controllableProcessFromDb = TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {

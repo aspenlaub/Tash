@@ -17,19 +17,15 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers;
 public class ControllableProcessTasksController : ODataController {
     private readonly ITashDatabase TashDatabase;
     private readonly ISimpleLogger SimpleLogger;
-    private readonly string LogId;
 
-    public ControllableProcessTasksController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger, ILogConfigurationFactory logConfigurationFactory) {
+    public ControllableProcessTasksController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger) {
         TashDatabase = tashDatabase;
         SimpleLogger = simpleLogger;
-        var logConfiguration = logConfigurationFactory.Create();
-        SimpleLogger.LogSubFolder = logConfiguration.LogSubFolder;
-        LogId = logConfiguration.LogId;
     }
 
     [HttpGet, EnableQuery]
     public IActionResult Get() {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation("Returning all controllable process tasks");
             return Ok(TashDatabase.ControllableProcessTasks);
         }
@@ -37,7 +33,7 @@ public class ControllableProcessTasksController : ODataController {
 
     [HttpGet, EnableQuery]
     public IActionResult Get(Guid key) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Get controllable process task with id={key}");
             var controllableProcessTaskFromDb = TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == key);
             if (controllableProcessTaskFromDb == null) {
@@ -58,7 +54,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpPut]
     public IActionResult Put(Guid key, [FromBody] ControllableProcessTask processTask) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Put controllable process task with id={key}");
             if (!ModelState.IsValid) {
                 SimpleLogger.LogInformation($"Model is not valid, cannot put controllable process task with id={key}");
@@ -87,7 +83,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpPatch]
     public IActionResult Patch(Guid key, Delta<ControllableProcessTask> patch) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Patch controllable process task with id={key}");
             if (!ModelState.IsValid) {
                 SimpleLogger.LogInformation($"Model is not valid, cannot patch controllable process task with id={key}");
@@ -114,7 +110,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpPost]
     public IActionResult Post([FromBody] ControllableProcessTask processTask) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Post controllable process task with id={processTask.Id}");
             var controllableProcessTaskFromDb = TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == processTask.Id);
             if (controllableProcessTaskFromDb != null) {
@@ -135,7 +131,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpDelete]
     public IActionResult Delete(Guid key) {
-        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), LogId))) {
+        using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController), SimpleLogger.LogId))) {
             SimpleLogger.LogInformation($"Delete controllable process task with id={key}");
             var controllableProcessTaskFromDb = TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == key);
             if (controllableProcessTaskFromDb == null) {
