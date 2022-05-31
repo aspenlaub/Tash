@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Interfaces;
@@ -9,38 +10,41 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-using Microsoft.Extensions.Logging;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Controllers;
 
 public class ControllableProcessesController : ODataController {
     private readonly ITashDatabase TashDatabase;
     private readonly ISimpleLogger SimpleLogger;
+    private readonly IMethodNamesFromStackFramesExtractor MethodNamesFromStackFramesExtractor;
 
-    public ControllableProcessesController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger) {
+    public ControllableProcessesController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger, IMethodNamesFromStackFramesExtractor methodNamesFromStackFramesExtractor) {
         TashDatabase = tashDatabase;
         SimpleLogger = simpleLogger;
+        MethodNamesFromStackFramesExtractor = methodNamesFromStackFramesExtractor;
     }
 
     [HttpGet, EnableQuery]
     public IActionResult Get() {
+        var methodNamesFromStack = MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
         using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
-            SimpleLogger.LogInformation("Returning all controllable processes");
+            SimpleLogger.LogInformationWithCallStack("Returning all controllable processes", methodNamesFromStack);
             return Ok(TashDatabase.ControllableProcesses);
         }
     }
 
     [HttpGet, EnableQuery]
     public IActionResult Get(int key) {
+        var methodNamesFromStack = MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
         using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
-            SimpleLogger.LogInformation($"Get controllable process with id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Get controllable process with id={key}", methodNamesFromStack);
             var controllableProcessFromDb = TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {
-                SimpleLogger.LogInformation($"No controllable process found with id={key}");
+                SimpleLogger.LogInformationWithCallStack($"No controllable process found with id={key}", methodNamesFromStack);
                 return NotFound();
             }
 
-            SimpleLogger.LogInformation($"Returning controllable process with id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Returning controllable process with id={key}", methodNamesFromStack);
             return Ok(controllableProcessFromDb);
         }
     }
@@ -53,23 +57,24 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpPut]
     public IActionResult Put(int key, [FromBody] ControllableProcess process) {
+        var methodNamesFromStack = MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
         using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
-            SimpleLogger.LogInformation($"Put controllable process with id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Put controllable process with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
-                SimpleLogger.LogInformation($"Model is not valid, cannot put controllable process with id={key}");
+                SimpleLogger.LogInformationWithCallStack($"Model is not valid, cannot put controllable process with id={key}", methodNamesFromStack);
                 return BadRequest(ModelState);
             }
 
             var controllableProcessesFromDb = TashDatabase.ControllableProcesses;
             var controllableProcessFromDb = controllableProcessesFromDb.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb != null) {
-                SimpleLogger.LogInformation($"Controllable process deleted for id={key}");
+                SimpleLogger.LogInformationWithCallStack($"Controllable process deleted for id={key}", methodNamesFromStack);
                 controllableProcessesFromDb.Remove(controllableProcessFromDb);
             }
 
             process.ProcessId = key;
             controllableProcessesFromDb.Add(process);
-            SimpleLogger.LogInformation($"Controllable process inserted for id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Controllable process inserted for id={key}", methodNamesFromStack);
             return Updated(process);
         }
     }
@@ -82,22 +87,23 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpPatch]
     public IActionResult Patch(int key, Delta<ControllableProcess> patch) {
+        var methodNamesFromStack = MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
         using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
-            SimpleLogger.LogInformation($"Patch controllable process with id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Patch controllable process with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
-                SimpleLogger.LogInformation($"Model is not valid, cannot patch controllable process with id={key}");
+                SimpleLogger.LogInformationWithCallStack($"Model is not valid, cannot patch controllable process with id={key}", methodNamesFromStack);
                 return BadRequest(ModelState);
             }
 
             var controllableProcessFromDb = TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {
-                SimpleLogger.LogInformation($"No controllable process found with id={key}");
+                SimpleLogger.LogInformationWithCallStack($"No controllable process found with id={key}", methodNamesFromStack);
                 return NotFound();
             }
 
             patch.Patch(controllableProcessFromDb);
 
-            SimpleLogger.LogInformation($"Controllable process updated for id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Controllable process updated for id={key}", methodNamesFromStack);
             return Updated(controllableProcessFromDb);
         }
     }
@@ -109,16 +115,17 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpPost]
     public IActionResult Post([FromBody] ControllableProcess process) {
+        var methodNamesFromStack = MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
         using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
-            SimpleLogger.LogInformation($"Post controllable process with id={process.ProcessId}");
+            SimpleLogger.LogInformationWithCallStack($"Post controllable process with id={process.ProcessId}", methodNamesFromStack);
             var controllableProcessFromDb = TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == process.ProcessId);
             if (controllableProcessFromDb != null) {
-                SimpleLogger.LogInformation($"A controllable process with id={process.ProcessId} already exists");
+                SimpleLogger.LogInformationWithCallStack($"A controllable process with id={process.ProcessId} already exists", methodNamesFromStack);
                 return BadRequest();
             }
 
             TashDatabase.ControllableProcesses.Add(process);
-            SimpleLogger.LogInformation($"Controllable process inserted for id={process.ProcessId}");
+            SimpleLogger.LogInformationWithCallStack($"Controllable process inserted for id={process.ProcessId}", methodNamesFromStack);
             return Created(process);
         }
     }
@@ -130,16 +137,17 @@ public class ControllableProcessesController : ODataController {
     /// <returns></returns>
     [HttpDelete]
     public IActionResult DeleteControllableProcess(int key) {
+        var methodNamesFromStack = MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
         using (SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController), SimpleLogger.LogId))) {
-            SimpleLogger.LogInformation($"Delete controllable process with id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Delete controllable process with id={key}", methodNamesFromStack);
             var controllableProcessFromDb = TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {
-                SimpleLogger.LogInformation($"No controllable process found with id={key}");
+                SimpleLogger.LogInformationWithCallStack($"No controllable process found with id={key}", methodNamesFromStack);
                 return NotFound();
             }
 
             TashDatabase.ControllableProcesses.Remove(controllableProcessFromDb);
-            SimpleLogger.LogInformation($"Controllable process deleted for id={key}");
+            SimpleLogger.LogInformationWithCallStack($"Controllable process deleted for id={key}", methodNamesFromStack);
             return StatusCode((int) HttpStatusCode.NoContent);
         }
     }
