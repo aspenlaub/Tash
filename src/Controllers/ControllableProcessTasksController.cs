@@ -27,7 +27,7 @@ public class ControllableProcessTasksController : ODataController {
 
     [HttpGet, EnableQuery]
     public IActionResult Get() {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController) + nameof(Get), _SimpleLogger.LogId))) {
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(ControllableProcessTasksController) + nameof(Get)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack("Returning all controllable process tasks", methodNamesFromStack);
             return Ok(_TashDatabase.ControllableProcessTasks);
@@ -36,7 +36,7 @@ public class ControllableProcessTasksController : ODataController {
 
     [HttpGet, EnableQuery]
     public IActionResult Get(Guid key) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController) + nameof(Get), _SimpleLogger.LogId))) {
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(ControllableProcessTasksController) + nameof(Get)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Get controllable process task with id={key}", methodNamesFromStack);
             var controllableProcessTaskFromDb = _TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == key);
@@ -58,7 +58,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpPut]
     public IActionResult Put(Guid key, [FromBody] ControllableProcessTask processTask) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController) + nameof(Put), _SimpleLogger.LogId))) {
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(ControllableProcessTasksController) + nameof(Put)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Put controllable process task with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
@@ -88,7 +88,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpPatch]
     public IActionResult Patch(Guid key, Delta<ControllableProcessTask> patch) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController) + nameof(Patch), _SimpleLogger.LogId))) {
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(ControllableProcessTasksController) + nameof(Patch)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Patch controllable process task with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
@@ -116,7 +116,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpPost]
     public IActionResult Post([FromBody] ControllableProcessTask processTask) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController) + nameof(Post), _SimpleLogger.LogId))) {
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(ControllableProcessTasksController) + nameof(Post)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Post controllable process task with id={processTask.Id}", methodNamesFromStack);
             var controllableProcessTaskFromDb = _TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == processTask.Id);
@@ -138,7 +138,7 @@ public class ControllableProcessTasksController : ODataController {
     /// <returns></returns>
     [HttpDelete]
     public IActionResult Delete(Guid key) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessTasksController) + nameof(Delete), _SimpleLogger.LogId))) {
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.CreateWithRandomId(nameof(ControllableProcessTasksController) + nameof(Delete)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Delete controllable process task with id={key}", methodNamesFromStack);
             var controllableProcessTaskFromDb = _TashDatabase.ControllableProcessTasks.FirstOrDefault(p => p.Id == key);
