@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using Aspenlaub.Net.GitHub.CSharp.Dvin.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Tash.Attributes;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
@@ -17,16 +21,22 @@ public class ControllableProcessesController : ODataController {
     private readonly ITashDatabase _TashDatabase;
     private readonly ISimpleLogger _SimpleLogger;
     private readonly IMethodNamesFromStackFramesExtractor _MethodNamesFromStackFramesExtractor;
+    private readonly IDvinRepository _DvinRepository;
+    private bool _HasExceptionFilterAttributeBeenSet;
 
-    public ControllableProcessesController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger, IMethodNamesFromStackFramesExtractor methodNamesFromStackFramesExtractor) {
+
+    public ControllableProcessesController(ITashDatabase tashDatabase, ISimpleLogger simpleLogger, IMethodNamesFromStackFramesExtractor methodNamesFromStackFramesExtractor, IDvinRepository dvinRepository) {
         _TashDatabase = tashDatabase;
         _SimpleLogger = simpleLogger;
         _MethodNamesFromStackFramesExtractor = methodNamesFromStackFramesExtractor;
+        _DvinRepository = dvinRepository;
     }
 
     [HttpGet, EnableQuery]
-    public IActionResult Get() {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(Get)))) {
+    public async Task<IActionResult> GetAsync() {
+        await SetExceptionFilterAttributeIfNecessaryAsync();
+
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(GetAsync)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack("Returning all controllable processes", methodNamesFromStack);
             return Ok(_TashDatabase.ControllableProcesses);
@@ -34,8 +44,10 @@ public class ControllableProcessesController : ODataController {
     }
 
     [HttpGet, EnableQuery]
-    public IActionResult Get(int key) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(Get)))) {
+    public async Task<IActionResult> GetAsync(int key) {
+        await SetExceptionFilterAttributeIfNecessaryAsync();
+
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(GetAsync)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Get controllable process with id={key}", methodNamesFromStack);
             var controllableProcessFromDb = _TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
@@ -56,8 +68,10 @@ public class ControllableProcessesController : ODataController {
     /// <param name="process"></param>
     /// <returns></returns>
     [HttpPut]
-    public IActionResult Put(int key, [FromBody] ControllableProcess process) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(Put)))) {
+    public async Task<IActionResult> PutAsync(int key, [FromBody] ControllableProcess process) {
+        await SetExceptionFilterAttributeIfNecessaryAsync();
+
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(PutAsync)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Put controllable process with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
@@ -86,8 +100,10 @@ public class ControllableProcessesController : ODataController {
     /// <param name="patch"></param>
     /// <returns></returns>
     [HttpPatch]
-    public IActionResult Patch(int key, Delta<ControllableProcess> patch) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(Patch)))) {
+    public async Task<IActionResult> PatchAsync(int key, Delta<ControllableProcess> patch) {
+        await SetExceptionFilterAttributeIfNecessaryAsync();
+
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(PatchAsync)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Patch controllable process with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
@@ -114,8 +130,10 @@ public class ControllableProcessesController : ODataController {
     /// <param name="process"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult Post([FromBody] ControllableProcess process) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(Post)))) {
+    public async Task<IActionResult> PostAsync([FromBody] ControllableProcess process) {
+        await SetExceptionFilterAttributeIfNecessaryAsync();
+
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(PostAsync)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Post controllable process with id={process.ProcessId}", methodNamesFromStack);
             var controllableProcessFromDb = _TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == process.ProcessId);
@@ -136,8 +154,10 @@ public class ControllableProcessesController : ODataController {
     /// <param name="key"></param>
     /// <returns></returns>
     [HttpDelete]
-    public IActionResult DeleteControllableProcess(int key) {
-        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(DeleteControllableProcess)))) {
+    public async Task<IActionResult> DeleteControllableProcessAsync(int key) {
+        await SetExceptionFilterAttributeIfNecessaryAsync();
+
+        using (_SimpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(DeleteControllableProcessAsync)))) {
             var methodNamesFromStack = _MethodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             _SimpleLogger.LogInformationWithCallStack($"Delete controllable process with id={key}", methodNamesFromStack);
             var controllableProcessFromDb = _TashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
@@ -150,5 +170,17 @@ public class ControllableProcessesController : ODataController {
             _SimpleLogger.LogInformationWithCallStack($"Controllable process deleted for id={key}", methodNamesFromStack);
             return StatusCode((int) HttpStatusCode.NoContent);
         }
+    }
+
+    private async Task SetExceptionFilterAttributeIfNecessaryAsync() {
+        if (_HasExceptionFilterAttributeBeenSet) { return; }
+
+        var errorsAndInfos = new ErrorsAndInfos();
+        var dvinApp = await _DvinRepository.LoadAsync(Constants.TashAppId, errorsAndInfos);
+        if (errorsAndInfos.AnyErrors()) {
+            throw new Exception("Tash app not registered");
+        }
+        DvinExceptionFilterAttribute.SetExceptionLogFolder(new Folder(dvinApp.ExceptionLogFolder));
+        _HasExceptionFilterAttributeBeenSet = true;
     }
 }
