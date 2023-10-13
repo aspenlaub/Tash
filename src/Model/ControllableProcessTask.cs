@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Model;
@@ -18,7 +18,7 @@ public class ControllableProcessTask {
 
     public string Text { get; init; } = "";
 
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public ControllableProcessTaskStatus Status { get; set; }
 
     public string ErrorMessage { get; set; } = "";

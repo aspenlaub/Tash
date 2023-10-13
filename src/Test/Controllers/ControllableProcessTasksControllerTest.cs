@@ -5,11 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers;
 
@@ -123,7 +123,7 @@ public class ControllableProcessTasksControllerTest {
         var response = await client.GetAsync(BaseUrl);
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
-        var controllableProcessTasks = JsonConvert.DeserializeObject<ODataResponse<ControllableProcessTask>>(responseString)?.Value.ToList();
+        var controllableProcessTasks = JsonSerializer.Deserialize<ODataResponse<ControllableProcessTask>>(responseString)?.Value.ToList();
         return controllableProcessTasks;
     }
 
@@ -131,12 +131,12 @@ public class ControllableProcessTasksControllerTest {
         var response = await client.GetAsync($"{BaseUrl}({taskId})");
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
-        var controllableProcessTask = JsonConvert.DeserializeObject<ControllableProcessTask>(responseString);
+        var controllableProcessTask = JsonSerializer.Deserialize<ControllableProcessTask>(responseString);
         return controllableProcessTask;
     }
 
     private static async Task<HttpResponseMessage> PutControllableProcessTask(HttpClient client, ControllableProcessTask processTask) {
-        var serializedTask = JsonConvert.SerializeObject(processTask);
+        var serializedTask = JsonSerializer.Serialize(processTask);
         var request = new StringContent(serializedTask, Encoding.UTF8, "application/json");
         request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         var response = await client.PutAsync($"{BaseUrl}({processTask.Id})", request);
@@ -144,14 +144,14 @@ public class ControllableProcessTasksControllerTest {
     }
 
     private static async Task<HttpResponseMessage> PatchControllableProcessTask(HttpClient client, Guid taskId, ControllableProcessTaskConfirmation confirmation) {
-        var request = new StringContent(JsonConvert.SerializeObject(confirmation), Encoding.UTF8, "application/json");
+        var request = new StringContent(JsonSerializer.Serialize(confirmation), Encoding.UTF8, "application/json");
         request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         var response = await client.PatchAsync($"{BaseUrl}({taskId})", request);
         return response;
     }
 
     private static async Task<HttpResponseMessage> PostControllableProcessTask(HttpClient client, ControllableProcessTask processTask) {
-        var request = new StringContent(JsonConvert.SerializeObject(processTask), Encoding.UTF8, "application/json");
+        var request = new StringContent(JsonSerializer.Serialize(processTask), Encoding.UTF8, "application/json");
         request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         var response = await client.PostAsync(BaseUrl, request);
         return response;

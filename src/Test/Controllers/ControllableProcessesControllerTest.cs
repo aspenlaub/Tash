@@ -5,11 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using ControllableProcess = Aspenlaub.Net.GitHub.CSharp.Tash.Model.ControllableProcess;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers;
@@ -111,21 +111,21 @@ public class ControllableProcessesControllerTest {
     }
 
     private static async Task<HttpResponseMessage> PutControllableProcess(HttpClient client, ControllableProcess process) {
-        var request = new StringContent(JsonConvert.SerializeObject(process), Encoding.UTF8, "application/json");
+        var request = new StringContent(JsonSerializer.Serialize(process), Encoding.UTF8, "application/json");
         request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         var response = await client.PutAsync($"{BaseUrl}({process.ProcessId})", request);
         return response;
     }
 
     private static async Task<HttpResponseMessage> PatchControllableProcess(HttpClient client, int processId, ControllableProcessConfirmation confirmation) {
-        var request = new StringContent(JsonConvert.SerializeObject(confirmation), Encoding.UTF8, "application/json");
+        var request = new StringContent(JsonSerializer.Serialize(confirmation), Encoding.UTF8, "application/json");
         request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         var response = await client.PatchAsync($"{BaseUrl}({processId})", request);
         return response;
     }
 
     private static async Task<HttpResponseMessage> PostControllableProcess(HttpClient client, ControllableProcess process) {
-        var request = new StringContent(JsonConvert.SerializeObject(process), Encoding.UTF8, "application/json");
+        var request = new StringContent(JsonSerializer.Serialize(process), Encoding.UTF8, "application/json");
         request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         var response = await client.PostAsync(BaseUrl, request);
         return response;
@@ -146,7 +146,7 @@ public class ControllableProcessesControllerTest {
         var response = await client.GetAsync(BaseUrl);
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
-        var controllableProcesses = JsonConvert.DeserializeObject<ODataResponse<ControllableProcess>>(responseString)?.Value.ToList();
+        var controllableProcesses = JsonSerializer.Deserialize<ODataResponse<ControllableProcess>>(responseString)?.Value.ToList();
         return controllableProcesses;
     }
 
@@ -154,7 +154,7 @@ public class ControllableProcessesControllerTest {
         var response = await client.GetAsync($"{BaseUrl}({processId})");
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
-        var controllableProcess = JsonConvert.DeserializeObject<ControllableProcess>(responseString);
+        var controllableProcess = JsonSerializer.Deserialize<ControllableProcess>(responseString);
         return controllableProcess;
     }
 
