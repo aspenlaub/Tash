@@ -45,9 +45,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dvin" Version="2.0.1631.598" />
+    <PackageReference Include="Dvin" Version="2.0.1667.998" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.2.4" />
-    <PackageReference Include="System.Text.Json" Version="8.0.1" />
+    <PackageReference Include="System.Text.Json" Version="8.0.2" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
