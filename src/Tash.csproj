@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AssemblyName>Aspenlaub.Net.GitHub.CSharp.Tash</AssemblyName>
     <RootNamespace>Aspenlaub.Net.GitHub.CSharp.Tash</RootNamespace>
     <GenerateBuildInfoConfigFile>false</GenerateBuildInfoConfigFile>
@@ -45,7 +45,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dvin" Version="2.0.1955.563" />
+    <PackageReference Include="Dvin" Version="2.0.1960.433" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.1.1" />
     <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
