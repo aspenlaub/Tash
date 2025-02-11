@@ -45,7 +45,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dvin" Version="2.0.2008.1081" />
+    <PackageReference Include="Dvin" Version="2.0.2029.1267" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.2.0" />
     <PackageReference Include="System.Text.Json" Version="9.0.2" />
   </ItemGroup>
