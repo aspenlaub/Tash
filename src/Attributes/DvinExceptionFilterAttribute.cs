@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Attributes;
 
 public class DvinExceptionFilterAttribute : ExceptionFilterAttribute {
-    private static IFolder _exceptionLogFolder;
+    private static IFolder ExceptionLogFolder;
 
     // ReSharper disable once UnusedMember.Global
     public static void SetExceptionLogFolder(IFolder exceptionLogFolder) {
-        _exceptionLogFolder = exceptionLogFolder;
+        ExceptionLogFolder = exceptionLogFolder;
     }
 
     public override void OnException(ExceptionContext context) {
-        ExceptionSaver.SaveUnhandledException(_exceptionLogFolder, context.Exception, nameof(Dvin), _ => { });
+        ExceptionSaver.SaveUnhandledException(ExceptionLogFolder, context.Exception, nameof(Dvin), _ => { });
         context.Result = new JsonResult(InternalServerError.Create("An exception was logged. We are sorry for the inconvenience."));
     }
 }

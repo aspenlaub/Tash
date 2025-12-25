@@ -19,7 +19,7 @@ public class ControllableProcessTasksControllerTest {
 
     [TestMethod]
     public async Task CanGetControllableProcessTasks() {
-        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
+        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
         List<ControllableProcessTask> controllableProcesses = await GetControllableProcessTasks(client);
         Assert.IsEmpty(controllableProcesses);
     }
@@ -28,7 +28,7 @@ public class ControllableProcessTasksControllerTest {
     public async Task CanPutControllableProcessTask() {
         ControllableProcessTask processTask = CreateTestProcessTask();
 
-        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
+        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
         HttpResponseMessage response = await PutControllableProcessTask(client, processTask);
         Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -41,7 +41,7 @@ public class ControllableProcessTasksControllerTest {
     public async Task CanGetControllableProcessTask() {
         ControllableProcessTask processTask = CreateTestProcessTask();
 
-        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
+        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
         HttpResponseMessage response = await PutControllableProcessTask(client, processTask);
         Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -54,7 +54,7 @@ public class ControllableProcessTasksControllerTest {
     public async Task CanConfirmCompletedProcessTask() {
         ControllableProcessTask processTask = CreateTestProcessTask();
 
-        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
+        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
         HttpResponseMessage response = await PutControllableProcessTask(client, processTask);
         Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -76,7 +76,7 @@ public class ControllableProcessTasksControllerTest {
     public async Task CanPostControllableProcessTask() {
         ControllableProcessTask processTask = CreateTestProcessTask();
 
-        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
+        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
         HttpResponseMessage response = await PostControllableProcessTask(client, processTask);
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
@@ -92,7 +92,7 @@ public class ControllableProcessTasksControllerTest {
     public async Task CanDeleteControllableProcessTask() {
         ControllableProcessTask processTask = CreateTestProcessTask();
 
-        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
+        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
         HttpResponseMessage response = await PostControllableProcessTask(client, processTask);
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
