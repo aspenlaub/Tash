@@ -9,20 +9,18 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OData.Edm;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash;
 
-public class Startup {
-    public Startup(IConfiguration configuration) {
-        Configuration = configuration;
-    }
-
-    public IConfiguration Configuration { get; }
+public class Startup(IConfiguration configuration) {
+    public IConfiguration Configuration { get; } = configuration;
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services) {
-        var model = TashModelBuilder.GetEdmModel();
+        IEdmModel model = TashModelBuilder.GetEdmModel();
         services.AddControllers()
             .AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(null)
                 .AddRouteComponents("", model)
@@ -50,11 +48,7 @@ public class Startup {
         app.UseODataQueryRequest();
 
         app.Use(next => context => {
-            var endpoint = context.GetEndpoint();
-            // ReSharper disable once ConvertIfStatementToReturnStatement
-            if (endpoint == null) {
-                return next(context);
-            }
+            Endpoint _ = context.GetEndpoint();
 
             return next(context);
         });

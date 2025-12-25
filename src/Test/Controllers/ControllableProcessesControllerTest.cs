@@ -12,6 +12,7 @@ using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableProcess = Aspenlaub.Net.GitHub.CSharp.Tash.Model.ControllableProcess;
 
+[assembly: DoNotParallelize]
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers;
 
 [TestClass]
@@ -20,7 +21,7 @@ public class ControllableProcessesControllerTest {
 
     [TestMethod]
     public async Task CanGetControllableProcesses() {
-        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
+        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
         List<ControllableProcess> controllableProcesses = await GetControllableProcesses(client);
         Assert.IsEmpty(controllableProcesses);
     }
@@ -29,7 +30,7 @@ public class ControllableProcessesControllerTest {
     public async Task CanPutControllableProcess() {
         ControllableProcess process = CreateTestProcess();
 
-        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
+        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
         HttpResponseMessage response = await PutControllableProcess(client, process);
         Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -42,7 +43,7 @@ public class ControllableProcessesControllerTest {
     public async Task CanGetControllableProcess() {
         ControllableProcess process = CreateTestProcess();
 
-        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
+        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
         HttpResponseMessage response = await PutControllableProcess(client, process);
         Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -55,7 +56,7 @@ public class ControllableProcessesControllerTest {
     public async Task CanConfirmControllableProcess() {
         ControllableProcess process = CreateTestProcess();
 
-        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
+        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
         HttpResponseMessage response = await PutControllableProcess(client, process);
         Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -79,12 +80,12 @@ public class ControllableProcessesControllerTest {
     public async Task CanPostControllableProcess() {
         ControllableProcess process = CreateTestProcess();
 
-        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
+        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
         HttpResponseMessage response = await PostControllableProcess(client, process);
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
         List<ControllableProcess> controllableProcesses = await GetControllableProcesses(client);
-        Assert.AreEqual(1, controllableProcesses.Count);
+        Assert.HasCount(1, controllableProcesses);
         Assert.IsTrue(process.MemberwiseEquals(controllableProcesses[0]));
 
         response = await PostControllableProcess(client, process);
@@ -95,7 +96,7 @@ public class ControllableProcessesControllerTest {
     public async Task CanDeleteControllableProcess() {
         ControllableProcess process = CreateTestProcess();
 
-        using HttpClient client = ControllerTestHelpers.CreateHttpClient();
+        using HttpClient client = await ControllerTestHelpers.CreateHttpClientAsync();
         HttpResponseMessage response = await PostControllableProcess(client, process);
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 

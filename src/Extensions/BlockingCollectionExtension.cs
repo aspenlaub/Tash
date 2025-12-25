@@ -11,7 +11,7 @@ public static class BlockingCollectionExtension {
             bool found;
             var itemsTakenOut = new List<T>();
             do {
-                var result = collection.TryTake(out var comparedItem);
+                bool result = collection.TryTake(out T comparedItem);
                 if (!result) { return; }
 
                 found = comparedItem.Equals(item);
@@ -20,7 +20,7 @@ public static class BlockingCollectionExtension {
                 }
             } while (!found);
 
-            Parallel.ForEach(itemsTakenOut, t => collection.Add(t));
+            Parallel.ForEach(itemsTakenOut, collection.Add);
         }
     }
 }
