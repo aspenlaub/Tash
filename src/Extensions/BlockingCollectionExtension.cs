@@ -20,7 +20,7 @@ public static class BlockingCollectionExtension {
                 }
             } while (!found);
 
-            Parallel.ForEach(itemsTakenOut, t => collection.Add(t));
+            Parallel.ForEach(itemsTakenOut, collection.Add);
         }
     }
 }

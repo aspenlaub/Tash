@@ -8,13 +8,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash;
 
 public static class Program {
     public static async Task Main(string[] args) {
-        var builder = await CreateWebHostBuilderAsync(args);
+        IWebHostBuilder builder = await CreateWebHostBuilderAsync(args);
         builder.RunHost(args);
     }
 
     public static async Task<IWebHostBuilder> CreateWebHostBuilderAsync(string[] args) {
         // ReSharper disable once RedundantAssignment
-        var release = true;
+        bool release = true;
 #if DEBUG
         release = false;
 #endif

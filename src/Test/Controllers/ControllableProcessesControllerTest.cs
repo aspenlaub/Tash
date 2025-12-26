@@ -12,6 +12,7 @@ using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableProcess = Aspenlaub.Net.GitHub.CSharp.Tash.Model.ControllableProcess;
 
+[assembly: DoNotParallelize]
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers;
 
 [TestClass]
@@ -84,7 +85,7 @@ public class ControllableProcessesControllerTest {
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
         List<ControllableProcess> controllableProcesses = await GetControllableProcesses(client);
-        Assert.AreEqual(1, controllableProcesses.Count);
+        Assert.HasCount(1, controllableProcesses);
         Assert.IsTrue(process.MemberwiseEquals(controllableProcesses[0]));
 
         response = await PostControllableProcess(client, process);
