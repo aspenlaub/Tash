@@ -9,17 +9,13 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tash;
 public static class Program {
     public static async Task Main(string[] args) {
         IWebHostBuilder builder = await CreateWebHostBuilderAsync(args);
-        builder.RunHost(args);
+        builder.RunHost();
     }
 
     public static async Task<IWebHostBuilder> CreateWebHostBuilderAsync(string[] args) {
         // ReSharper disable once RedundantAssignment
-        bool release = true;
-#if DEBUG
-        release = false;
-#endif
         return
-            (await WebHost.CreateDefaultBuilder(args).UseDvinAndPeghAsync("Tash", Constants.TashAppId, release, args))
+            (await WebHost.CreateDefaultBuilder(args).UseDvinAndPeghAsync("Tash", Constants.TashAppId))
             .UseStartup<Startup>();
     }
 }

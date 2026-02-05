@@ -1,5 +1,4 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
-using Aspenlaub.Net.GitHub.CSharp.Tash.Attributes;
+﻿using Aspenlaub.Net.GitHub.CSharp.Tash.Attributes;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Components;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,7 +28,7 @@ public class Startup(IConfiguration configuration) {
 
         services.AddRazorPages(); // for MapRazorPages()
 
-        services.UseTashDvinAndPegh("Tash", new DummyCsArgumentPrompter());
+        services.UseTashDvinAndPegh("Tash");
 
         services.AddControllers(opt => opt.Filters.Add<DvinExceptionFilterAttribute>());
     }
