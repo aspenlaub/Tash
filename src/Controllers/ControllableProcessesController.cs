@@ -7,6 +7,7 @@ using Aspenlaub.Net.GitHub.CSharp.Dvin.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Attributes;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tash.Interfaces;
