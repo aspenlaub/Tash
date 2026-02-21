@@ -12,7 +12,6 @@ using Aspenlaub.Net.GitHub.CSharp.Tash.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableProcess = Aspenlaub.Net.GitHub.CSharp.Tash.Model.ControllableProcess;
 
-[assembly: DoNotParallelize]
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers;
 
 [TestClass]

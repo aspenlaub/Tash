@@ -1,21 +1,21 @@
-﻿using System.Threading.Tasks;
-using Aspenlaub.Net.GitHub.CSharp.Dvin.Extensions;
-using Microsoft.AspNetCore;
+﻿using Aspenlaub.Net.GitHub.CSharp.Dvin.Components;
+using Aspenlaub.Net.GitHub.CSharp.Tash.Components;
 using Microsoft.AspNetCore.Hosting;
-// ReSharper disable ConditionIsAlwaysTrueOrFalse
+using Microsoft.Extensions.Hosting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash;
 
-public static class Program {
-    public static async Task Main(string[] args) {
-        IWebHostBuilder builder = await CreateWebHostBuilderAsync(args);
-        builder.RunHost();
+public class Program {
+    public static void Main(string[] args) {
+        CreateHostBuilder(args).Build().Run();
     }
 
-    public static async Task<IWebHostBuilder> CreateWebHostBuilderAsync(string[] args) {
-        // ReSharper disable once RedundantAssignment
-        return
-            (await WebHost.CreateDefaultBuilder(args).UseDvinAndPeghAsync("Tash", Constants.TashAppId))
-            .UseStartup<Startup>();
+    public static IHostBuilder CreateHostBuilder(string[] args) {
+        return Host.CreateDefaultBuilder(args)
+           .ConfigureWebHostDefaults(builder => {
+               builder.ConfigureUrl(Constants.TashApplicationName, Constants.TashAppId);
+               builder.ConfigureServices(Configurator.ConfigureServices);
+               builder.Configure(Configurator.Configure);
+           });
     }
 }

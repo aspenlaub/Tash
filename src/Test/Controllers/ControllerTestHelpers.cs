@@ -1,13 +1,17 @@
 ﻿using System.Net.Http;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+[assembly: DoNotParallelize]
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tash.Test.Controllers;
 
 public static class ControllerTestHelpers {
+
     public static HttpClient CreateHttpClient() {
-        IWebHostBuilder builder = new WebHostBuilder().UseStartup<Startup>();
-        var server = new TestServer(builder);
-        return server.CreateClient();
+        var factory = new WebApplicationFactory<Program>();
+        HttpClient client = factory.CreateClient();
+        Assert.IsNotNull(client);
+        return client;
     }
 }

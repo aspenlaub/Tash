@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Aspenlaub.Net.GitHub.CSharp.Dvin.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Dvin.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
@@ -32,7 +34,7 @@ public class ControllableProcessesController(
         await SetExceptionFilterAttributeIfNecessaryAsync();
 
         using (simpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(GetAsync)))) {
-            var methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
+            IList<string> methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             LogInformationWithCallStack("Returning all controllable processes", methodNamesFromStack);
             return Ok(tashDatabase.ControllableProcesses);
         }
@@ -43,9 +45,9 @@ public class ControllableProcessesController(
         await SetExceptionFilterAttributeIfNecessaryAsync();
 
         using (simpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(GetAsync)))) {
-            var methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
+            IList<string> methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             LogInformationWithCallStack($"Get controllable process with id={key}", methodNamesFromStack);
-            var controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
+            ControllableProcess controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {
                 LogInformationWithCallStack($"No controllable process found with id={key}", methodNamesFromStack);
                 return NotFound();
@@ -67,15 +69,15 @@ public class ControllableProcessesController(
         await SetExceptionFilterAttributeIfNecessaryAsync();
 
         using (simpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(PutAsync)))) {
-            var methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
+            IList<string> methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             LogInformationWithCallStack($"Put controllable process with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
                 LogInformationWithCallStack($"Model is not valid, cannot put controllable process with id={key}", methodNamesFromStack);
                 return BadRequest(ModelState);
             }
 
-            var controllableProcessesFromDb = tashDatabase.ControllableProcesses;
-            var controllableProcessFromDb = controllableProcessesFromDb.FirstOrDefault(p => p.ProcessId == key);
+            BlockingCollection<ControllableProcess> controllableProcessesFromDb = tashDatabase.ControllableProcesses;
+            ControllableProcess controllableProcessFromDb = controllableProcessesFromDb.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb != null) {
                 LogInformationWithCallStack($"Controllable process deleted for id={key}", methodNamesFromStack);
                 controllableProcessesFromDb.Remove(controllableProcessFromDb);
@@ -99,14 +101,14 @@ public class ControllableProcessesController(
         await SetExceptionFilterAttributeIfNecessaryAsync();
 
         using (simpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(PatchAsync)))) {
-            var methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
+            IList<string> methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             LogInformationWithCallStack($"Patch controllable process with id={key}", methodNamesFromStack);
             if (!ModelState.IsValid) {
                 LogInformationWithCallStack($"Model is not valid, cannot patch controllable process with id={key}", methodNamesFromStack);
                 return BadRequest(ModelState);
             }
 
-            var controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
+            ControllableProcess controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {
                 LogInformationWithCallStack($"No controllable process found with id={key}", methodNamesFromStack);
                 return NotFound();
@@ -129,9 +131,9 @@ public class ControllableProcessesController(
         await SetExceptionFilterAttributeIfNecessaryAsync();
 
         using (simpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(ControllableProcessesController) + nameof(PostAsync)))) {
-            var methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
+            IList<string> methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             LogInformationWithCallStack($"Post controllable process with id={process.ProcessId}", methodNamesFromStack);
-            var controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == process.ProcessId);
+            ControllableProcess controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == process.ProcessId);
             if (controllableProcessFromDb != null) {
                 LogInformationWithCallStack($"A controllable process with id={process.ProcessId} already exists", methodNamesFromStack);
                 return BadRequest();
@@ -153,9 +155,9 @@ public class ControllableProcessesController(
         await SetExceptionFilterAttributeIfNecessaryAsync();
 
         using (simpleLogger.BeginScope(SimpleLoggingScopeId.Create(nameof(DeleteControllableProcessAsync)))) {
-            var methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
+            IList<string> methodNamesFromStack = methodNamesFromStackFramesExtractor.ExtractMethodNamesFromStackFrames();
             LogInformationWithCallStack($"Delete controllable process with id={key}", methodNamesFromStack);
-            var controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
+            ControllableProcess controllableProcessFromDb = tashDatabase.ControllableProcesses.FirstOrDefault(p => p.ProcessId == key);
             if (controllableProcessFromDb == null) {
                 LogInformationWithCallStack($"No controllable process found with id={key}", methodNamesFromStack);
                 return NotFound();
@@ -171,7 +173,7 @@ public class ControllableProcessesController(
         if (_HasExceptionFilterAttributeBeenSet) { return; }
 
         var errorsAndInfos = new ErrorsAndInfos();
-        var dvinApp = await dvinRepository.LoadAsync(Constants.TashAppId, errorsAndInfos);
+        DvinApp dvinApp = await dvinRepository.LoadAsync(Constants.TashAppId, errorsAndInfos);
         if (errorsAndInfos.AnyErrors()) {
             throw new Exception("Tash app not registered");
         }
