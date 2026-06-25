@@ -16,6 +16,7 @@
     <RepositoryUrl>https://github.com/aspenlaub/Tash.git</RepositoryUrl>
     <RepositoryBranch>master</RepositoryBranch>
     <PackageId>Tash</PackageId>
+    <MSBuildEnableWorkloadResolver>false</MSBuildEnableWorkloadResolver>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
